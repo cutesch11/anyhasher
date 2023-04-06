@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     name: Build Frontend Artifact
+    needs:
+      - audit
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -23,3 +25,11 @@ jobs:
 
       - name: Compile code
         run: cd frontend && npm run build 
+
+  audit:
+    name: Audit Frontend Packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check for vulnerabilities
+        run: cd frontend && npm audit --production --audit-level=medium
